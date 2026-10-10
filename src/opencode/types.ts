@@ -78,6 +78,7 @@ export interface PromptResponse {
 }
 
 export interface CreateSessionInput {
+  readonly id?: string;
   readonly title?: string;
   readonly agent?: string;
   readonly model?: ModelRef;

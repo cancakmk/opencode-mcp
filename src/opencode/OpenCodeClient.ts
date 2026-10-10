@@ -70,6 +70,7 @@ export class OpenCodeClient {
 
   async createSession(input: CreateSessionInput = {}): Promise<SessionResponse> {
     const body: Record<string, unknown> = {};
+    if (input.id !== undefined) body.id = input.id;
     if (input.title !== undefined) body.title = input.title;
     if (input.agent !== undefined) body.agent = input.agent;
     if (input.model !== undefined) body.model = input.model;

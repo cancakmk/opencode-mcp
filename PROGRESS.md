@@ -35,6 +35,10 @@
       [text boş gövdeyi "ok" yapar], src/opencode/OpenCodeClient.ts [fs.read text modu,
       responseType], src/server/OpenCodeMcpServer.ts [metin kuvvetlendirme])
 
+- [x] Faz 10 — n8n chat trigger + MCP + `oc_ask` oturum "ensure" düzeltmesi (n8n workflow
+      `xdyQEjF0ZV9IDqtV`: Chat Trigger → Standalone MCP Client → Respond; `oc_ask` artık
+      verilen id yoksa oturumu oluşturur; sohbet sürekliliği doğrulandı)
+
 TÜM FAZLAR TAMAMLANDI
 
 ## Tam Kapsamlı Araç Testi (Faz 9)

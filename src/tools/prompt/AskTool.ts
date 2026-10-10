@@ -22,11 +22,12 @@ export class AskTool extends BaseTool {
     const timeoutMs = asOptionalNumber(args.timeoutMs) ?? 300_000;
     const text = asString(args.text);
 
-    let sessionId = asOptionalString(args.sessionId);
-    if (sessionId === undefined) {
-      const created = await this.deps.client.createSession({ title: asOptionalString(args.title) });
-      sessionId = created.data.id;
-    }
+    const requestedSession = asOptionalString(args.sessionId);
+    const created = await this.deps.client.createSession({
+      ...(requestedSession !== undefined ? { id: requestedSession } : {}),
+      title: asOptionalString(args.title),
+    });
+    const sessionId = created.data.id;
 
     const latest = await this.deps.client.listMessages(sessionId, { order: "desc", limit: 1 });
     const since = latest.data[0]?.time?.created ?? 0;
