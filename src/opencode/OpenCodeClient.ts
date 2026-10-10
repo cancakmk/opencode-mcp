@@ -26,6 +26,8 @@ export interface RequestOptions {
   readonly body?: unknown;
   /** Ham (binary/octet-stream) gövde; verilirse `body` yok sayılır. */
   readonly rawBody?: { readonly contentType: string; readonly data: string };
+  /** Yanıtın nasıl çözüleceği: `json` (varsayılan) veya `text`. */
+  readonly responseType?: "json" | "text";
 }
 
 /** OpenCode API 2xx dışı bir yanıt döndürdüğünde atılan hata. */
@@ -162,8 +164,8 @@ export class OpenCodeClient {
     return this.request<unknown>("GET", "/api/fs/find", { query: { ...location(directory), query, type, limit } });
   }
 
-  async readFile(path: string, directory?: string): Promise<unknown> {
-    return this.request<unknown>("GET", `${paths.fsRead(path)}`, { query: location(directory) });
+  async readFile(path: string, directory?: string): Promise<string> {
+    return this.request<string>("GET", `${paths.fsRead(path)}`, { query: location(directory), responseType: "text" });
   }
 
   async writeFile(path: string, content: string, directory?: string): Promise<unknown> {
@@ -258,6 +260,9 @@ export class OpenCodeClient {
     }
     if (text.length === 0) {
       return undefined as T;
+    }
+    if (options.responseType === "text") {
+      return text as T;
     }
     return JSON.parse(text) as T;
   }

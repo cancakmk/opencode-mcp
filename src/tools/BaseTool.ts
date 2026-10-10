@@ -40,8 +40,14 @@ export abstract class BaseTool {
 
   abstract execute(args: Record<string, unknown>): Promise<ToolResult>;
 
-  protected text(value: string): ToolResult {
-    return { content: [{ type: "text", text: value }] };
+  protected text(value: unknown): ToolResult {
+    const body =
+      typeof value === "string"
+        ? value
+        : value === undefined
+          ? "ok"
+          : (JSON.stringify(value, null, 2) ?? "ok");
+    return { content: [{ type: "text", text: body }] };
   }
 
   protected failure(value: string): ToolResult {

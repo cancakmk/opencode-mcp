@@ -57,7 +57,10 @@ export class OpenCodeMcpServer {
         try {
           const result = await tool.execute((args ?? {}) as Record<string, unknown>);
           this.logger.info("tool ok", { tool: tool.name, durationMs: Date.now() - startedAt });
-          const content = result.content.map((part) => ({ type: "text" as const, text: part.text }));
+          const content = result.content.map((part) => ({
+            type: "text" as const,
+            text: typeof part.text === "string" ? part.text : String(part.text ?? ""),
+          }));
           return result.isError === true ? { content, isError: true } : { content };
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);

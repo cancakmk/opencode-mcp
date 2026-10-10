@@ -31,16 +31,29 @@
       README n8n bölümü; Standalone MCP Client ile `oc_ask` → "OK")
 - [x] Faz 8 — Doküman + yayına hazırlık (README tam sürüm: araç/kaynak/prompt tabloları,
       güvenlik, n8n; package.json repository/homepage/bugs/author). npm yayını onay bekliyor.
+- [x] Faz 9 — Tam kapsamlı araç testi + düzeltmeler (dosyalar: src/tools/BaseTool.ts
+      [text boş gövdeyi "ok" yapar], src/opencode/OpenCodeClient.ts [fs.read text modu,
+      responseType], src/server/OpenCodeMcpServer.ts [metin kuvvetlendirme])
 
 TÜM FAZLAR TAMAMLANDI
 
+## Tam Kapsamlı Araç Testi (Faz 9)
+`essential` **27/27**, `full` **31/31** PASS (gerçek izole motora karşı, n8n konteynerinden):
+session create/list/get/active/diff/delete, prompt, ask, wait, interrupt, message list/get,
+permission list, saved permission list, file read/list/find/write, vcs info/status/diff/branch,
+model list/default/switch, agent list/switch, provider list, health, oc_api.
+Bulunan ve düzeltilen 2 hata: (1) boş gövde dönen uçlar (`switch_model/agent`) `text: undefined`
+üretiyordu → protokol hatası; (2) `fs.read` JSON değil düz metin döndürüyordu → JSON.parse hatası.
+Canlı doğrulanamayanlar (ortam ön koşulu): `oc_permission_reply` ve `oc_saved_permission_remove`
+(izole motor izinleri **otomatik onaylıyor** → bekleyen/kayıtlı izin oluşmuyor → 404);
+`oc_vcs_init` (sunucu bu konteynerde **503 VCS initialization failed** döndürüyor; araç uç noktayı
+doğru çağırıyor, hata sunucudan geliyor).
+
 ## Şu Anki Durum
-- Aktif faz: yok — Faz 1–8 tamamlandı.
-- Doğrulama özeti: typecheck temiz; `npm test` (unit); `npm audit` 0 açık; build başarılı;
-  uçtan uca: n8n workflow `4tWn6voXvHjMn51a` → Standalone MCP Client → `oc_ask` → **"OK"**.
-- Yayın durumu: private repo `github.com/cancakmk/opencode-mcp`; etiketler `faz-1..faz-8`.
-  npm'e public yayın kullanıcı onayı bekliyor.
-- Bilinen notlar: `essential` profilde 28 araç (bağlam yükü); gerekirse portmanteau/progressive
-  disclosure (PROGRESS notu). n8n e2e workflow'u n8n içinde yaşar (repo dışı).
-- Son güncelleme: 2026-10-10T11:35:00Z
+- Aktif faz: yok — Faz 1–9 tamamlandı.
+- Doğrulama: typecheck temiz; `npm test` 15/15; `npm audit` 0; build başarılı; araçlar 27/27 (essential)
+  ve 31/31 (full); n8n e2e workflow `4tWn6voXvHjMn51a` → `oc_ask` → "OK".
+- Yayın durumu: private repo `github.com/cancakmk/opencode-mcp`; etiketler `faz-1..faz-9`.
+  npm public yayın kullanıcı onayı bekliyor.
+- Son güncelleme: 2026-10-10T11:40:00Z
 - Oturum: (bkz. opencode oturum kimliği)
