@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { OpenCodeClient } from "../opencode/OpenCodeClient.js";
+import type { SessionWaiter } from "../opencode/SessionWaiter.js";
 import type { Logger } from "../logging/Logger.js";
 import type { ToolProfile } from "../config/Config.js";
 
@@ -18,6 +19,7 @@ export interface ToolResult {
 /** Araçların paylaştığı bağımlılıklar (bağımlılık enjeksiyonu). */
 export interface ToolDependencies {
   readonly client: OpenCodeClient;
+  readonly waiter: SessionWaiter;
   readonly logger: Logger;
 }
 

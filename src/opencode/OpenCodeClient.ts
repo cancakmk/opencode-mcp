@@ -1,5 +1,15 @@
 import type { Logger } from "../logging/Logger.js";
-import type { ServerInfo } from "./types.js";
+import type {
+  CreateSessionInput,
+  ListMessagesQuery,
+  ListSessionsQuery,
+  MessageListResponse,
+  MessageResponse,
+  PromptResponse,
+  ServerInfo,
+  SessionListResponse,
+  SessionResponse,
+} from "./types.js";
 
 export interface OpenCodeClientOptions {
   readonly baseUrl: string;
@@ -45,10 +55,61 @@ export class OpenCodeClient {
     return this.normalizedBaseUrl;
   }
 
-  /** Sunucu sağlığı ve sürüm bilgisi. */
+  // --- Sunucu -------------------------------------------------------------
+
   async info(): Promise<ServerInfo> {
     return this.request<ServerInfo>("GET", "/api/info");
   }
+
+  // --- Oturumlar ----------------------------------------------------------
+
+  async createSession(input: CreateSessionInput = {}): Promise<SessionResponse> {
+    const body: Record<string, unknown> = {};
+    if (input.title !== undefined) body.title = input.title;
+    if (input.agent !== undefined) body.agent = input.agent;
+    if (input.model !== undefined) body.model = input.model;
+    if (input.directory !== undefined) body.location = { directory: input.directory };
+    return this.request<SessionResponse>("POST", "/api/session", { body });
+  }
+
+  async listSessions(query: ListSessionsQuery = {}): Promise<SessionListResponse> {
+    return this.request<SessionListResponse>("GET", "/api/session", { query: toQuery(query) });
+  }
+
+  async activeSessions(): Promise<SessionListResponse> {
+    return this.request<SessionListResponse>("GET", "/api/session/active");
+  }
+
+  async getSession(sessionId: string): Promise<SessionResponse> {
+    return this.request<SessionResponse>("GET", paths.session(sessionId));
+  }
+
+  async deleteSession(sessionId: string): Promise<void> {
+    await this.request<void>("DELETE", paths.session(sessionId));
+  }
+
+  // --- Mesajlar / prompt --------------------------------------------------
+
+  async promptSession(sessionId: string, text: string): Promise<PromptResponse> {
+    return this.request<PromptResponse>("POST", `${paths.session(sessionId)}/prompt`, { body: { text } });
+  }
+
+  async listMessages(sessionId: string, query: ListMessagesQuery = {}): Promise<MessageListResponse> {
+    return this.request<MessageListResponse>("GET", `${paths.session(sessionId)}/message`, { query: toQuery(query) });
+  }
+
+  async getMessage(sessionId: string, messageId: string): Promise<MessageResponse> {
+    return this.request<MessageResponse>(
+      "GET",
+      `${paths.session(sessionId)}/message/${encodeURIComponent(messageId)}`,
+    );
+  }
+
+  async interruptSession(sessionId: string): Promise<void> {
+    await this.request<void>("POST", `${paths.session(sessionId)}/interrupt`);
+  }
+
+  // --- Genel --------------------------------------------------------------
 
   /** Genel amaçlı istek; tüm kaynak/operasyonlar bunu kullanır. */
   async request<T>(method: string, path: string, options: RequestOptions = {}): Promise<T> {
@@ -85,4 +146,12 @@ export class OpenCodeClient {
     }
     return JSON.parse(text) as T;
   }
+}
+
+const paths = {
+  session: (sessionId: string): string => `/api/session/${encodeURIComponent(sessionId)}`,
+};
+
+function toQuery(input: object): Record<string, string | number | boolean | undefined> {
+  return input as Record<string, string | number | boolean | undefined>;
 }

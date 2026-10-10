@@ -4,6 +4,7 @@ import type { Config } from "../config/Config.js";
 import type { OpenCodeClient } from "../opencode/OpenCodeClient.js";
 import type { Logger } from "../logging/Logger.js";
 import { ToolRegistry } from "../tools/ToolRegistry.js";
+import { SessionWaiter } from "../opencode/SessionWaiter.js";
 import type { BaseTool } from "../tools/BaseTool.js";
 
 /**
@@ -18,7 +19,10 @@ export class OpenCodeMcpServer {
     client: OpenCodeClient,
     private readonly logger: Logger,
   ) {
-    this.registry = new ToolRegistry({ client, logger }, config.toolProfile);
+    this.registry = new ToolRegistry(
+      { client, waiter: new SessionWaiter(client, logger), logger },
+      config.toolProfile,
+    );
   }
 
   build(): McpServer {

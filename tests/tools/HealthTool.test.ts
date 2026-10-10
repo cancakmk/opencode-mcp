@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { HealthTool } from "../../src/tools/HealthTool.js";
+import { SessionWaiter } from "../../src/opencode/SessionWaiter.js";
 import { Logger } from "../../src/logging/Logger.js";
 import type { OpenCodeClient } from "../../src/opencode/OpenCodeClient.js";
 
@@ -12,7 +13,7 @@ describe("HealthTool", () => {
       baseUrl: "http://x:4096",
     } as unknown as OpenCodeClient;
 
-    const tool = new HealthTool({ client, logger });
+    const tool = new HealthTool({ client, waiter: new SessionWaiter(client, logger), logger });
     const result = await tool.execute({});
 
     expect(result.isError).toBeUndefined();
