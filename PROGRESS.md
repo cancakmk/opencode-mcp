@@ -19,19 +19,20 @@
 - [x] Faz 3 — Session & message araçları + `oc_ask` (prompt & wait) (dosyalar:
       src/opencode/{OpenCodeClient,SessionWaiter,message,types}.ts, src/util/{args,sleep}.ts,
       src/tools/session/*, src/tools/message/*, src/tools/prompt/*, tests/opencode/*)
-- [ ] Faz 4 — Permission, file, vcs, model/agent araçları (sıradaki)
-- [ ] Faz 5 — Gözlemlenebilirlik (aktivite özeti, yapısal log, log/diff resources)
+- [x] Faz 4 — Permission, file, vcs, model/agent araçları (dosyalar:
+      src/tools/permission/*, src/tools/file/*, src/tools/vcs/*, src/tools/model/*,
+      src/tools/agent/*, src/tools/session/SessionDiffTool.ts; OpenCodeClient metodları)
+- [ ] Faz 5 — Gözlemlenebilirlik (aktivite özeti, yapısal log, log/diff resources) (sıradaki)
 - [ ] Faz 6 — `oc_api` backstop + profiller + resources/prompts
 - [ ] Faz 7 — n8n uçtan uca (MCP Client Tool + AI Agent)
 - [ ] Faz 8 — Doküman + (opsiyonel) npm yayın
 
 ## Şu Anki Durum
-- Aktif faz: Faz 4
-- Faz 1: typecheck/test/audit/build temiz; stdio `oc_health` → V2 `2.0.26`.
-- Faz 2: konteyner `n8n_default` (http :8790/mcp); yetkisiz → 401; Bearer ile oturum;
-  `oc_health` → izole `opencode-agent`'ten `2.0.26`.
-- Faz 3 doğrulaması: `essential` profilde 11 araç; n8n konteynerinden `oc_ask`
-  ("Reply with exactly OK") → **"OK"** (oturum aç → prompt → bekle → metin).
-- Sıradaki somut adım: Faz 4 — permission/file/vcs/model/agent araçları.
-- Son güncelleme: 2026-10-10T10:45:00Z
+- Aktif faz: Faz 5
+- Faz 1–3: bkz. git tag faz-1..faz-3 (stdin/stdio, http, session/message/ask).
+- Faz 4 doğrulaması: `essential` profilde **28 araç**; n8n konteynerinden
+  `oc_model_list`, `oc_agent_list`, `oc_provider_list`, `oc_file_list` izole motordan
+  gerçek veri döndürdü; `oc_vcs_status` boş (workspace bir repo değil), permission boş.
+- Sıradaki somut adım: Faz 5 — aktivite özeti + yapısal log + log/diff kaynakları.
+- Son güncelleme: 2026-10-10T10:48:00Z
 - Oturum: (bkz. opencode oturum kimliği)

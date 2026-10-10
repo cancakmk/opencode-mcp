@@ -5,6 +5,7 @@ import type {
   ListSessionsQuery,
   MessageListResponse,
   MessageResponse,
+  ModelRef,
   PromptResponse,
   ServerInfo,
   SessionListResponse,
@@ -23,6 +24,8 @@ export interface OpenCodeClientOptions {
 export interface RequestOptions {
   readonly query?: Readonly<Record<string, string | number | boolean | undefined>>;
   readonly body?: unknown;
+  /** Ham (binary/octet-stream) gövde; verilirse `body` yok sayılır. */
+  readonly rawBody?: { readonly contentType: string; readonly data: string };
 }
 
 /** OpenCode API 2xx dışı bir yanıt döndürdüğünde atılan hata. */
@@ -109,6 +112,115 @@ export class OpenCodeClient {
     await this.request<void>("POST", `${paths.session(sessionId)}/interrupt`);
   }
 
+  async sessionDiff(
+    sessionId: string,
+    query: { from?: string; to?: string; context?: string } = {},
+  ): Promise<unknown> {
+    return this.request<unknown>("GET", `${paths.session(sessionId)}/diff`, { query: toQuery(query) });
+  }
+
+  // --- İzinler ------------------------------------------------------------
+
+  async listPendingPermissions(directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/permission/request", { query: location(directory) });
+  }
+
+  async listSessionPermissions(sessionId: string): Promise<unknown> {
+    return this.request<unknown>("GET", `${paths.session(sessionId)}/permission`);
+  }
+
+  async replyPermission(
+    sessionId: string,
+    requestId: string,
+    decision: "once" | "always" | "reject",
+    message?: string,
+  ): Promise<unknown> {
+    const body: Record<string, unknown> = { decision };
+    if (message !== undefined) body.message = message;
+    return this.request<unknown>(
+      "POST",
+      `${paths.session(sessionId)}/permission/${encodeURIComponent(requestId)}/reply`,
+      { body },
+    );
+  }
+
+  async listSavedPermissions(projectID?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/permission/saved", { query: { projectID } });
+  }
+
+  async removeSavedPermission(id: string): Promise<void> {
+    await this.request<void>("DELETE", `/api/permission/saved/${encodeURIComponent(id)}`);
+  }
+
+  // --- Dosya sistemi ------------------------------------------------------
+
+  async listFiles(path?: string, directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/fs/list", { query: { ...location(directory), path } });
+  }
+
+  async findFiles(query: string, type?: string, limit?: number, directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/fs/find", { query: { ...location(directory), query, type, limit } });
+  }
+
+  async readFile(path: string, directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", `${paths.fsRead(path)}`, { query: location(directory) });
+  }
+
+  async writeFile(path: string, content: string, directory?: string): Promise<unknown> {
+    return this.request<unknown>("POST", "/api/experimental/fs/write", {
+      query: { ...location(directory), path },
+      rawBody: { contentType: "application/octet-stream", data: content },
+    });
+  }
+
+  // --- VCS ----------------------------------------------------------------
+
+  async vcsInfo(directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/vcs", { query: location(directory) });
+  }
+
+  async vcsStatus(directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/vcs/status", { query: location(directory) });
+  }
+
+  async vcsDiff(mode: "working" | "branch" | "committed", base?: string, context?: string, directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/vcs/diff", { query: { ...location(directory), mode, base, context } });
+  }
+
+  async vcsBranches(search?: string, limit?: number, directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/vcs/branch", { query: { ...location(directory), search, limit } });
+  }
+
+  async vcsInit(provider?: string, directory?: string): Promise<unknown> {
+    return this.request<unknown>("POST", "/api/vcs/init", { query: { ...location(directory), provider } });
+  }
+
+  // --- Model / Agent / Provider ------------------------------------------
+
+  async listModels(directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/model", { query: location(directory) });
+  }
+
+  async defaultModel(directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/model/default", { query: location(directory) });
+  }
+
+  async switchModel(sessionId: string, model: ModelRef): Promise<unknown> {
+    return this.request<unknown>("POST", `${paths.session(sessionId)}/model`, { body: { model } });
+  }
+
+  async listAgents(directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/agent", { query: location(directory) });
+  }
+
+  async switchAgent(sessionId: string, agent: string): Promise<unknown> {
+    return this.request<unknown>("POST", `${paths.session(sessionId)}/agent`, { body: { agent } });
+  }
+
+  async listProviders(directory?: string): Promise<unknown> {
+    return this.request<unknown>("GET", "/api/provider", { query: location(directory) });
+  }
+
   // --- Genel --------------------------------------------------------------
 
   /** Genel amaçlı istek; tüm kaynak/operasyonlar bunu kullanır. */
@@ -129,7 +241,10 @@ export class OpenCodeClient {
     }
 
     let body: string | undefined;
-    if (options.body !== undefined) {
+    if (options.rawBody !== undefined) {
+      headers["content-type"] = options.rawBody.contentType;
+      body = options.rawBody.data;
+    } else if (options.body !== undefined) {
       headers["content-type"] = "application/json";
       body = JSON.stringify(options.body);
     }
@@ -150,7 +265,13 @@ export class OpenCodeClient {
 
 const paths = {
   session: (sessionId: string): string => `/api/session/${encodeURIComponent(sessionId)}`,
+  fsRead: (path: string): string => `/api/fs/read/${path.replace(/^\/+/, "")}`,
 };
+
+/** Location-scoped uç noktalar için `location` query parametresini üretir. */
+function location(directory?: string): Record<string, string | undefined> {
+  return directory !== undefined ? { location: JSON.stringify({ directory }) } : {};
+}
 
 function toQuery(input: object): Record<string, string | number | boolean | undefined> {
   return input as Record<string, string | number | boolean | undefined>;
