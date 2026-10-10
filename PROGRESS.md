@@ -27,14 +27,17 @@
       SessionWaiter aktivite, OpenCodeMcpServer süre logu, tests/opencode/activity.test.ts)
 - [x] Faz 6 — `oc_api` backstop + profiller + resources/prompts (dosyalar:
       src/tools/api/ApiTool.ts, src/server/PromptRegistry.ts, ToolRegistry/Server güncellemeleri)
-- [ ] Faz 7 — n8n uçtan uca (MCP Client Tool + AI Agent) (sıradaki)
-- [ ] Faz 8 — Doküman + (opsiyonel) npm yayın
+- [x] Faz 7 — n8n uçtan uca (MCP Client Tool + AI Agent) (n8n workflow ID `4tWn6voXvHjMn51a`;
+      README n8n bölümü; Standalone MCP Client ile `oc_ask` → "OK")
+- [ ] Faz 8 — Doküman + (opsiyonel) npm yayın (sıradaki)
 
 ## Şu Anki Durum
-- Aktif faz: Faz 7
-- Faz 1–5: bkz. git tag faz-1..faz-5.
-- Faz 6 doğrulaması: prompt `delegate_to_opencode` kayıtlı; `oc_api` `essential`'da yok,
-  `full`'da var ve `/api/info`'yu başarıyla çağırdı (tam kapsama backstop).
-- Sıradaki somut adım: Faz 7 — n8n'de AI Agent + MCP Client Tool ile uçtan uca deneme.
-- Son güncelleme: 2026-10-10T11:29:00Z
+- Aktif faz: Faz 8
+- Faz 1–6: bkz. git tag faz-1..faz-6.
+- Faz 7 doğrulaması: n8n workflow `4tWn6voXvHjMn51a` (Manual Trigger → Standalone MCP
+  Client → Result), Bearer kimliği `opencode-mcp` (httpBearerAuth) ile; çalıştırma
+  **success**, çıktı `{"content":[{"type":"text","text":"OK"}]}` — yani n8n → MCP →
+  izole OpenCode uçtan uca.
+- Sıradaki somut adım: Faz 8 — doküman (README genişletme) ve opsiyonel npm yayın.
+- Son güncelleme: 2026-10-10T11:33:00Z
 - Oturum: (bkz. opencode oturum kimliği)

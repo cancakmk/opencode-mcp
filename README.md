@@ -63,6 +63,22 @@ Add to an MCP client that uses `mcpServers`:
 }
 ```
 
+## Usage (n8n / HTTP)
+
+Run the server as an HTTP container on a Docker network shared with n8n (see
+`docker-compose.yml`). It listens on `POST /mcp` and requires a Bearer token
+(`MCP_AUTH_TOKEN`).
+
+In n8n:
+
+- **Standalone MCP Client** (`@n8n/n8n-nodes-langchain.mcpClient`): endpoint
+  `http://opencode-mcp:8790/mcp`, transport `httpStreamable`, authentication
+  `bearerAuth` (an `httpBearerAuth` credential holding the token), pick a tool
+  (e.g. `oc_ask`) and pass JSON input.
+- **AI Agent + MCP Client Tool** (`@n8n/n8n-nodes-langchain.mcpClientTool`): the
+  same endpoint/credential as an agent tool, so an n8n AI Agent can delegate
+  tasks to OpenCode.
+
 ## Development
 
 ```bash
