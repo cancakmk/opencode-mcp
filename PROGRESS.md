@@ -25,16 +25,16 @@
 - [x] Faz 5 — Gözlemlenebilirlik (aktivite özeti, yapısal log, log/diff resources)
       (dosyalar: src/opencode/activity.ts, src/server/ResourceRegistry.ts,
       SessionWaiter aktivite, OpenCodeMcpServer süre logu, tests/opencode/activity.test.ts)
-- [ ] Faz 6 — `oc_api` backstop + profiller + resources/prompts (sıradaki)
-- [ ] Faz 7 — n8n uçtan uca (MCP Client Tool + AI Agent)
+- [x] Faz 6 — `oc_api` backstop + profiller + resources/prompts (dosyalar:
+      src/tools/api/ApiTool.ts, src/server/PromptRegistry.ts, ToolRegistry/Server güncellemeleri)
+- [ ] Faz 7 — n8n uçtan uca (MCP Client Tool + AI Agent) (sıradaki)
 - [ ] Faz 8 — Doküman + (opsiyonel) npm yayın
 
 ## Şu Anki Durum
-- Aktif faz: Faz 6
-- Faz 1–4: bkz. git tag faz-1..faz-4 (stdio, http, session/message/ask, permission/file/vcs/model/agent).
-- Faz 5 doğrulaması: MCP kaynakları (`oc://health|providers|agents`) listelendi ve okundu;
-  `oc_ask` sonucu **Activity** özeti döndürdü (`shell: echo hello-from-mcp`); araç çağrıları
-  süre ile loglanıyor.
-- Sıradaki somut adım: Faz 6 — `oc_api` backstop (tam kapsama) + profiller + prompt şablonu.
-- Son güncelleme: 2026-10-10T10:51:00Z
+- Aktif faz: Faz 7
+- Faz 1–5: bkz. git tag faz-1..faz-5.
+- Faz 6 doğrulaması: prompt `delegate_to_opencode` kayıtlı; `oc_api` `essential`'da yok,
+  `full`'da var ve `/api/info`'yu başarıyla çağırdı (tam kapsama backstop).
+- Sıradaki somut adım: Faz 7 — n8n'de AI Agent + MCP Client Tool ile uçtan uca deneme.
+- Son güncelleme: 2026-10-10T11:29:00Z
 - Oturum: (bkz. opencode oturum kimliği)

@@ -23,6 +23,7 @@ import { FileFindTool, FileListTool, FileReadTool, FileWriteTool } from "./file/
 import { VcsBranchTool, VcsDiffTool, VcsInfoTool, VcsInitTool, VcsStatusTool } from "./vcs/VcsTools.js";
 import { ModelDefaultTool, ModelListTool, SwitchModelTool } from "./model/ModelTools.js";
 import { AgentListTool, ProviderListTool, SwitchAgentTool } from "./agent/AgentTools.js";
+import { ApiTool } from "./api/ApiTool.js";
 
 /**
  * Kullanılabilir araçları toplar ve aktif profile göre filtreler.
@@ -72,6 +73,8 @@ export class ToolRegistry {
       new AgentListTool(deps),
       new SwitchAgentTool(deps),
       new ProviderListTool(deps),
+      // Kapsama backstop (full profilde)
+      new ApiTool(deps),
     ];
   }
 

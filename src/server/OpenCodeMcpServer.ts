@@ -6,6 +6,7 @@ import type { Logger } from "../logging/Logger.js";
 import { ToolRegistry } from "../tools/ToolRegistry.js";
 import { SessionWaiter } from "../opencode/SessionWaiter.js";
 import { ResourceRegistry } from "./ResourceRegistry.js";
+import { PromptRegistry } from "./PromptRegistry.js";
 import type { BaseTool } from "../tools/BaseTool.js";
 
 /**
@@ -34,6 +35,7 @@ export class OpenCodeMcpServer {
       this.registerTool(server, tool);
     }
     new ResourceRegistry(this.client, this.logger).register(server);
+    new PromptRegistry(this.logger).register(server);
     this.logger.info("tools registered", {
       count: tools.length,
       profile: this.config.toolProfile,
