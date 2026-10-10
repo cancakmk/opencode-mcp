@@ -37,9 +37,14 @@ export class AskTool extends BaseTool {
     if (settled.outcome === "timeout") {
       return this.failure(`OpenCode did not finish within ${timeoutMs} ms (session ${sessionId}).`);
     }
+    const body = settled.text || "(no text output)";
+    const withActivity =
+      settled.activity.length > 0
+        ? `${body}\n\nActivity:\n${settled.activity.map((line) => `- ${line}`).join("\n")}`
+        : body;
     if (settled.outcome === "failed") {
-      return this.failure(`OpenCode reported a failure in session ${sessionId}:\n${settled.text}`);
+      return this.failure(`OpenCode reported a failure in session ${sessionId}:\n${withActivity}`);
     }
-    return this.text(settled.text || "(no text output)");
+    return this.text(withActivity);
   }
 }

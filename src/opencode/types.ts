@@ -33,10 +33,18 @@ export interface Session {
   readonly location?: { readonly directory?: string };
 }
 
+/** Tool çalıştırma durumu (araç parçaları için). */
+export interface ToolState {
+  readonly status?: string;
+  readonly input?: Readonly<Record<string, unknown>>;
+}
+
 /** Asistan mesajındaki içerik parçası (metin, tool, reasoning…). */
 export interface MessageContentPart {
   readonly type: string;
   readonly text?: string;
+  readonly name?: string;
+  readonly state?: ToolState;
 }
 
 /** Bir oturum mesajı (kullanıcı, asistan, idle…). */

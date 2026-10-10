@@ -22,17 +22,19 @@
 - [x] Faz 4 — Permission, file, vcs, model/agent araçları (dosyalar:
       src/tools/permission/*, src/tools/file/*, src/tools/vcs/*, src/tools/model/*,
       src/tools/agent/*, src/tools/session/SessionDiffTool.ts; OpenCodeClient metodları)
-- [ ] Faz 5 — Gözlemlenebilirlik (aktivite özeti, yapısal log, log/diff resources) (sıradaki)
-- [ ] Faz 6 — `oc_api` backstop + profiller + resources/prompts
+- [x] Faz 5 — Gözlemlenebilirlik (aktivite özeti, yapısal log, log/diff resources)
+      (dosyalar: src/opencode/activity.ts, src/server/ResourceRegistry.ts,
+      SessionWaiter aktivite, OpenCodeMcpServer süre logu, tests/opencode/activity.test.ts)
+- [ ] Faz 6 — `oc_api` backstop + profiller + resources/prompts (sıradaki)
 - [ ] Faz 7 — n8n uçtan uca (MCP Client Tool + AI Agent)
 - [ ] Faz 8 — Doküman + (opsiyonel) npm yayın
 
 ## Şu Anki Durum
-- Aktif faz: Faz 5
-- Faz 1–3: bkz. git tag faz-1..faz-3 (stdin/stdio, http, session/message/ask).
-- Faz 4 doğrulaması: `essential` profilde **28 araç**; n8n konteynerinden
-  `oc_model_list`, `oc_agent_list`, `oc_provider_list`, `oc_file_list` izole motordan
-  gerçek veri döndürdü; `oc_vcs_status` boş (workspace bir repo değil), permission boş.
-- Sıradaki somut adım: Faz 5 — aktivite özeti + yapısal log + log/diff kaynakları.
-- Son güncelleme: 2026-10-10T10:48:00Z
+- Aktif faz: Faz 6
+- Faz 1–4: bkz. git tag faz-1..faz-4 (stdio, http, session/message/ask, permission/file/vcs/model/agent).
+- Faz 5 doğrulaması: MCP kaynakları (`oc://health|providers|agents`) listelendi ve okundu;
+  `oc_ask` sonucu **Activity** özeti döndürdü (`shell: echo hello-from-mcp`); araç çağrıları
+  süre ile loglanıyor.
+- Sıradaki somut adım: Faz 6 — `oc_api` backstop (tam kapsama) + profiller + prompt şablonu.
+- Son güncelleme: 2026-10-10T10:51:00Z
 - Oturum: (bkz. opencode oturum kimliği)

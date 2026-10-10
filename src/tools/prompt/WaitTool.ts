@@ -21,6 +21,11 @@ export class WaitTool extends BaseTool {
     if (settled.outcome === "timeout") {
       return this.failure(`Session ${sessionId} did not become idle within ${timeoutMs} ms.`);
     }
-    return this.text(settled.text || `Session ${sessionId} is idle (${settled.outcome}).`);
+    const body = settled.text || `Session ${sessionId} is idle (${settled.outcome}).`;
+    return this.text(
+      settled.activity.length > 0
+        ? `${body}\n\nActivity:\n${settled.activity.map((line) => `- ${line}`).join("\n")}`
+        : body,
+    );
   }
 }
