@@ -23,6 +23,17 @@
     "ai",
     "coding-agent"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cancakmk/opencode-mcp.git"
+  },
+  "homepage": "https://github.com/cancakmk/opencode-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/cancakmk/opencode-mcp/issues"
+  },
+  "author": {
+    "name": "Hakkıcan Çakmak"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",

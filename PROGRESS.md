@@ -29,15 +29,18 @@
       src/tools/api/ApiTool.ts, src/server/PromptRegistry.ts, ToolRegistry/Server güncellemeleri)
 - [x] Faz 7 — n8n uçtan uca (MCP Client Tool + AI Agent) (n8n workflow ID `4tWn6voXvHjMn51a`;
       README n8n bölümü; Standalone MCP Client ile `oc_ask` → "OK")
-- [ ] Faz 8 — Doküman + (opsiyonel) npm yayın (sıradaki)
+- [x] Faz 8 — Doküman + yayına hazırlık (README tam sürüm: araç/kaynak/prompt tabloları,
+      güvenlik, n8n; package.json repository/homepage/bugs/author). npm yayını onay bekliyor.
+
+TÜM FAZLAR TAMAMLANDI
 
 ## Şu Anki Durum
-- Aktif faz: Faz 8
-- Faz 1–6: bkz. git tag faz-1..faz-6.
-- Faz 7 doğrulaması: n8n workflow `4tWn6voXvHjMn51a` (Manual Trigger → Standalone MCP
-  Client → Result), Bearer kimliği `opencode-mcp` (httpBearerAuth) ile; çalıştırma
-  **success**, çıktı `{"content":[{"type":"text","text":"OK"}]}` — yani n8n → MCP →
-  izole OpenCode uçtan uca.
-- Sıradaki somut adım: Faz 8 — doküman (README genişletme) ve opsiyonel npm yayın.
-- Son güncelleme: 2026-10-10T11:33:00Z
+- Aktif faz: yok — Faz 1–8 tamamlandı.
+- Doğrulama özeti: typecheck temiz; `npm test` (unit); `npm audit` 0 açık; build başarılı;
+  uçtan uca: n8n workflow `4tWn6voXvHjMn51a` → Standalone MCP Client → `oc_ask` → **"OK"**.
+- Yayın durumu: private repo `github.com/cancakmk/opencode-mcp`; etiketler `faz-1..faz-8`.
+  npm'e public yayın kullanıcı onayı bekliyor.
+- Bilinen notlar: `essential` profilde 28 araç (bağlam yükü); gerekirse portmanteau/progressive
+  disclosure (PROGRESS notu). n8n e2e workflow'u n8n içinde yaşar (repo dışı).
+- Son güncelleme: 2026-10-10T11:35:00Z
 - Oturum: (bkz. opencode oturum kimliği)
