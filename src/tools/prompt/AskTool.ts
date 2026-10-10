@@ -13,7 +13,10 @@ export class AskTool extends BaseTool {
     "Send a task to OpenCode and wait for the answer. Creates a session if sessionId is omitted. Returns the assistant text.";
   readonly parameters = {
     text: z.string().min(1).describe("The task or question for OpenCode"),
-    sessionId: z.string().optional().describe("Existing session id to continue"),
+    sessionId: z
+      .string()
+      .optional()
+      .describe("Existing OpenCode session id (starts with 'ses'). Omit to create a new session; any other value is normalized."),
     title: z.string().optional().describe("Title for a newly created session"),
     timeoutMs: z.number().int().positive().optional().describe("Timeout in milliseconds (default 300000)"),
   };

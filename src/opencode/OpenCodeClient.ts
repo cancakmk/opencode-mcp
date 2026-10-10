@@ -1,4 +1,5 @@
 import type { Logger } from "../logging/Logger.js";
+import { normalizeSessionId } from "../util/session.js";
 import type {
   CreateSessionInput,
   ListMessagesQuery,
@@ -70,7 +71,7 @@ export class OpenCodeClient {
 
   async createSession(input: CreateSessionInput = {}): Promise<SessionResponse> {
     const body: Record<string, unknown> = {};
-    if (input.id !== undefined) body.id = input.id;
+    if (input.id !== undefined) body.id = normalizeSessionId(input.id);
     if (input.title !== undefined) body.title = input.title;
     if (input.agent !== undefined) body.agent = input.agent;
     if (input.model !== undefined) body.model = input.model;
@@ -270,7 +271,7 @@ export class OpenCodeClient {
 }
 
 const paths = {
-  session: (sessionId: string): string => `/api/session/${encodeURIComponent(sessionId)}`,
+  session: (sessionId: string): string => `/api/session/${encodeURIComponent(normalizeSessionId(sessionId))}`,
   fsRead: (path: string): string => `/api/fs/read/${path.replace(/^\/+/, "")}`,
 };
 

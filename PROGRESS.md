@@ -39,7 +39,20 @@
       `xdyQEjF0ZV9IDqtV`: Chat Trigger → Standalone MCP Client → Respond; `oc_ask` artık
       verilen id yoksa oturumu oluşturur; sohbet sürekliliği doğrulandı)
 
+- [x] Faz 11 — sessionId normalizasyonu + AI Agent chat workflow (dosyalar:
+      src/util/session.ts, OpenCodeClient normalize, tests/util/session.test.ts;
+      n8n workflow `Tzl9aRSZqrA3b7Ub`: Chat Trigger → AI Agent (OpenCode Go modeli
+      + memory + OpenCode MCP Client Tool) → yanıt)
+
 TÜM FAZLAR TAMAMLANDI
+
+## n8n entegrasyonu (özet)
+- `xdyQEjF0ZV9IDqtV` — Chat Trigger → Standalone MCP Client (`oc_ask`) → yanıt (LLM'siz, deterministik).
+- `4tWn6voXvHjMn51a` — Manual Trigger → MCP Client (`oc_ask`) e2e.
+- `Tzl9aRSZqrA3b7Ub` — Chat Trigger → AI Agent (model + memory + MCP Client Tool) → yanıt (LLM'li).
+- **opencode-go-proxy** (`/home/can/projects/opencode-go-proxy`): n8n'in OpenAI model çağrısına
+  OpenCode Go'nun zorunlu `x-opencode-session` başlığını ekleyen minimal ters proxy; AI Agent
+  modeli bu proxy'e (`http://opencode-go-proxy:8088/v1`) yönlendirilir.
 
 ## Tam Kapsamlı Araç Testi (Faz 9)
 `essential` **27/27**, `full` **31/31** PASS (gerçek izole motora karşı, n8n konteynerinden):
